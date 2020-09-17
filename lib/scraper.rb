@@ -47,11 +47,11 @@ class Scraper
             Plant.new(new_plant_instantiation_array) ### => Now you can send this off to Plant.new(Scraper.retrieve_single_plant_info(url))
         end
 
-    def self.search_by_common_name(input)
-        input = input.gsub(" ", "+")
-        search_this = 'https://www.wildflower.org/plants/search.php?search_field=' + input + '&family=Acanthaceae&newsearch=true&demo='
-        search_this
-    end
+    # def self.search_by_common_name(input)
+    #     input = input.gsub(" ", "+")
+    #     search_this = 'https://www.wildflower.org/plants/search.php?search_field=' + input + '&family=Acanthaceae&newsearch=true&demo='
+    #     search_this
+    # end
 
     def self.scrape_search_page(search_page_url)
         doc = Nokogiri::HTML(open(search_page_url))
