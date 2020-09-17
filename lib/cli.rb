@@ -21,7 +21,7 @@ class CommandLineInterface
             Typing "back" will take you back to this menu.
             Once you're finished with using the app, typing "exit" will end your session.
         OPENER
-        until input.downcase = "exit"
+        until input.downcase == "exit"
             if input.downcase == "states"
                 CommandLineInterface.get_list_of_states_from_scraper 
                 CommandLineInterface.choose_from_list_of_states
@@ -43,7 +43,7 @@ class CommandLineInterface
         if index_number.between?(0, Scraper.list_of_states.length-1)
             search_this = 'https://www.wildflower.org/collections/' + Scraper.state_url_ends[index_number]
             Scraper.scrape_search_page(search_this)
-        elsif input = "back"
+        elsif input == "back"
             CommandLineInterface.call
         else
             puts "That input is invalid. Please select a number present on the list."
@@ -56,7 +56,7 @@ class CommandLineInterface
         if index_number.between?(0, Scraper.last_search_page_scraped.length-1)
             plant_choice = Plant.all.find { |single_plant| single_plant.url == ('https://www.wildflower.org' + Scraper.last_search_page_scraped[index_number]) }
             puts "Scientific name: #{plant_choice.scientific_name} | Common name(s): #{plant_choice.common_names} | Family name: #{plant_choice.family_name}\n#{plant_choice.description}"
-        elsif input = "back"
+        elsif input.downcase == "back"
             CommandLineInterface.call
         else
             "That input is invalid. Please select a number present on the list."
