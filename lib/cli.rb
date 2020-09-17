@@ -55,10 +55,7 @@ class CommandLineInterface
         index_number = input.to_i
         if index_number.between?(0, Scraper.last_search_page_scraped.length-1)
             plant_choice = Plant.all.find { |single_plant| single_plant.url == ('https://www.wildflower.org' + Scraper.last_search_page_scraped[index_number]) }
-            puts LEARNMORE = <<~PLANTINFO.strip
-             Scientific name: #{plant_choice.scientific_name} | Common name(s): #{plant_choice.common_names} | Family name: #{plant_choice.family_name}
-             #{plant_choice.description}
-             PLANTINFO
+            puts "Scientific name: #{plant_choice.scientific_name} | Common name(s): #{plant_choice.common_names} | Family name: #{plant_choice.family_name}\n#{plant_choice.description}"
         elsif input = "back"
             CommandLineInterface.call
         else
