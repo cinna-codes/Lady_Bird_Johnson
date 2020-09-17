@@ -10,8 +10,6 @@ class Scraper
     @@state_url_ends = []
     @@list_of_states = []
     @@last_search_page_scraped = []
-    
-
 
     def self.get_all_states
         states = Nokogiri::HTML(open(@@collections_url))
@@ -55,7 +53,7 @@ class Scraper
 
             new_plant_instantiation_array = [url, scientific_name, common_names, family_name, description]
             Plant.new(new_plant_instantiation_array) ### => Now you can send this off to Plant.new(Scraper.retrieve_single_plant_info(url))
-
+        end
             #####Move all above to Scraper class; Plant.new(assign data from the Scraper method)
 
             # all_sections = doc.css(".section").map { |d| d }  # => Grabs every section on the page & places them into an array
@@ -78,7 +76,6 @@ class Scraper
             # # # a_tags = sections[1].css("a").map { |d| d }  # => Grabs every anchor tag
             # # # @duration = a_tags[0].text # => Perennial
             # # # @habit = a_tags[1].text # => Subshrub
-    end
 
     def self.search_by_common_name(input)
         input = input.gsub(" ", "+")
@@ -89,14 +86,13 @@ class Scraper
     def self.scrape_search_page(search_page_url)
         doc = Nokogiri::HTML(open(search_page_url))
         if !doc.css("p").text.include?("Your search did not return any results, please try again.")
-            with_nils = doc.css("td a").map { |d| d.attribute("href").text.delete_prefix("..") if d.attribute("href").text.include?("plants") }
-            @@last_search_page_scraped = with_nils.compact
-            @@last_search_page_scraped.each.with_index(1) do |url_half, i|
-                url = 'https://www.wildflower.org' + url_half
+            partial_urls = doc.css("td a").map { |d| d.attribute("href").text.delete_prefix("..") if d.attribute("href").text.include?("plants") }.compact
+            @@last_search_page_scraped = partial_urls.map { |url_half| url_half = ('https://www.wildflower.org' + url_half) }
+            @@last_search_page_scraped.each do |url| # .with_index(1) do |url, i|
                 new_plant = Scraper.retrieve_single_plant_info(url)
-                puts "#{i}. #{new_plant.scientific_name} - #{new_plant.common_names}"
+                # puts "#{i}. #{new_plant.scientific_name} - #{new_plant.common_names}"
             end
-            doc.css("i").map { |d| d.text } 
+            # doc.css("i").map { |d| d.text } 
         else
             @@last_search_page_scraped = []
            puts "Your search did not return any results, please try again."
