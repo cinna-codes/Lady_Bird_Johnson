@@ -24,6 +24,17 @@ class
         Scraper.list_of_states.each.with_index(1) { |d, i| puts "#{i}. #{d}" }  # => Starts index @ 1
     end
 
+    def self.choose_from_list_of_states
+        gets input.strip
+        index_number = input.to_i - 1
+        if index_number.between?(0, Scraper.list_of_states.length-1)
+            search_this = 'https://www.wildflower.org/collections/' + Scraper.state_url_ends[index_number]
+            Scraper.scrape_search_page(search_this)
+        else
+            puts "That input is invalid. Please select a number present on the list."
+        end
+    end
+
     def self.choose_from_search_page
         input = gets.strip
         index_number = input.to_i

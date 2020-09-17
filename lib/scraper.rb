@@ -3,9 +3,7 @@ require 'open-uri'
 require 'pry'
 
 class Scraper
-
     # BASE_URL = 'https://www.wildflower.org'
-    
     @@collections_url = 'https://www.wildflower.org/collections/'
     @@state_url_ends = []
     @@list_of_states = []
@@ -24,14 +22,8 @@ class Scraper
         @@list_of_states
     end
 
-    def self.search_by_state
-        gets input.strip
-        index_number = input.to_i - 1
-        if index_number.between?(0, @@list_of_states.length-1)
-            @@collections_url + @@state_url_ends[index_number]
-        else
-            puts "That input is invalid. Please select a number present on the list."
-        end
+    def self.state_url_ends
+        @@state_url_ends
     end
 
     def self.retrieve_single_plant_info(url)
@@ -54,28 +46,6 @@ class Scraper
             new_plant_instantiation_array = [url, scientific_name, common_names, family_name, description]
             Plant.new(new_plant_instantiation_array) ### => Now you can send this off to Plant.new(Scraper.retrieve_single_plant_info(url))
         end
-            #####Move all above to Scraper class; Plant.new(assign data from the Scraper method)
-
-            # all_sections = doc.css(".section").map { |d| d }  # => Grabs every section on the page & places them into an array
-            # relevant_sections = all_sections[1..5] # => Grabs Plant Characteristics through Benefit
-            # # => .map { |section| section.to_s } will turn each section into a string(DO NOT USE .TEXT BEFORE IT) and *CONVERTS TO ARRAY OF STRINGS*...from there you can .gsub your `<br>`s and things
-
-            # array_to_split_by = ["\n", "<br>"]
-            # array_of_things_to_remove_with_gsub = ["<h4>", '</h4>', '<strong>', '</strong>']
-
-            # relevant_sections.map do |section|
-            #     section = section.to_s
-            #     section = section.gsub(Regexp.union(array_of_things_to_remove_with_gsub), "")
-            #     section = section.split(Regexp.union(array_to_split_by))
-            #     section.shift #=> gets rid of `<div style=\"float:left;width:97.3%;\" class=\"section\">"`
-            #     section.pop(2) #=> gets rid of `"", "</div>"`
-            #     section
-            # end
-
-            # # Maybe???
-            # # # a_tags = sections[1].css("a").map { |d| d }  # => Grabs every anchor tag
-            # # # @duration = a_tags[0].text # => Perennial
-            # # # @habit = a_tags[1].text # => Subshrub
 
     def self.search_by_common_name(input)
         input = input.gsub(" ", "+")
@@ -102,5 +72,4 @@ class Scraper
     def self.last_search_page_scraped
         @@last_search_page_scraped
     end
-
 end

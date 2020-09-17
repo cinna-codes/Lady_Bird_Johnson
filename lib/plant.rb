@@ -19,6 +19,11 @@ class Plant
 
     end
 
+        def self.all
+            @@all
+        end
+end
+
         # @scientific_name = doc.css("h2 i").text
         # @tax_array = doc.css("h3").map { |line| line.text } #creates an array + places pure text into array
         # @common_names = @tax_array[1]
@@ -54,8 +59,3 @@ class Plant
         #     # # a_tags = sections[1].css("a").map { |d| d }  # => Grabs every anchor tag
         #     # # @duration = a_tags[0].text # => Perennial
         #     # # @habit = a_tags[1].text # => Subshrub
-
-        def self.all
-            @@all
-        end
-end
