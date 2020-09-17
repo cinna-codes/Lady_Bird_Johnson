@@ -4,11 +4,12 @@ require 'pry'
 
 class Scraper
 
-    BASE_URL = 'https://www.wildflower.org'
+    # BASE_URL = 'https://www.wildflower.org'
     
     @@collections_url = 'https://www.wildflower.org/collections/'
     @@state_url_ends = []
     @@list_of_states = []
+    @@last_search_page_scraped = []
 
 
     def self.get_all_states
@@ -51,8 +52,8 @@ class Scraper
                 description = "No description provided."
             end
 
-            new_plant_instantiation_array = [scientific_name, common_names, family_name, description]
-            new_plant_instantiation_array ### => Now you can send this off to Plant.new(Scraper.retrieve_single_plant_info(url))
+            new_plant_instantiation_array = [url, scientific_name, common_names, family_name, description]
+            Plant.new(new_plant_instantiation_array) ### => Now you can send this off to Plant.new(Scraper.retrieve_single_plant_info(url))
 
             #####Move all above to Scraper class; Plant.new(assign data from the Scraper method)
 
@@ -88,17 +89,21 @@ class Scraper
         doc = Nokogiri::HTML(open(search_page_url))
         if !doc.css("p").text.include?("Your search did not return any results, please try again.")
             with_nils = doc.css("td a").map { |d| d.attribute("href").text.delete_prefix("..") if d.attribute("href").text.include?("plants") }
-            no_nils = with_nils.compact
-            no_nils.each.with_index(1) do |url_half, i|
+            @@last_search_page_scraped = with_nils.compact
+            @@last_search_page_scraped.each.with_index(1) do |url_half, i|
                 url = 'https://www.wildflower.org' + url_half
-                new_plant = Plant.new(Scraper.retrieve_single_plant_info(url))
+                new_plant = Scraper.retrieve_single_plant_info(url)
                 puts "#{i}. #{new_plant.scientific_name} - #{new_plant.common_names}"
-                #Puts new_plant and its attributes in a numbered list?????? Should there be a `.each.with_index(1)` ???
             end
             doc.css("i").map { |d| d.text } 
         else
+            @@last_search_page_scraped = []
            puts "Your search did not return any results, please try again."
         end
+    end
+
+    def self.last_search_page_scraped
+        @@last_search_page_scraped
     end
 
 end

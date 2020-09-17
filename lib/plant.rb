@@ -4,13 +4,20 @@ require_relative "..lib/scraper.rb"
 require 'pry'
 
 class Plant
-    attr_reader :scientific_name, :common_names, :family_name, :description
+    attr_reader :url, :scientific_name, :common_names, :family_name, :description
+
+    @@all = []
 
     def initialize(plant_array)
-        @scientific_name = plant_array[0] 
-        @common_names = plant_array[1] 
-        @family_name = plant_array[2] 
-        @description = plant_array[3]
+        @url = plant_array[0]
+        @scientific_name = plant_array[1] 
+        @common_names = plant_array[2] 
+        @family_name = plant_array[3] 
+        @description = plant_array[4]
+
+        @@all << self
+
+    end
 
         # @scientific_name = doc.css("h2 i").text
         # @tax_array = doc.css("h3").map { |line| line.text } #creates an array + places pure text into array
@@ -47,5 +54,8 @@ class Plant
         #     # # a_tags = sections[1].css("a").map { |d| d }  # => Grabs every anchor tag
         #     # # @duration = a_tags[0].text # => Perennial
         #     # # @habit = a_tags[1].text # => Subshrub
-    end
+
+        def self.all
+            @@all
+        end
 end
