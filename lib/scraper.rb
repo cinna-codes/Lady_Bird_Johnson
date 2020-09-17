@@ -10,6 +10,7 @@ class Scraper
     @@state_url_ends = []
     @@list_of_states = []
     @@last_search_page_scraped = []
+    
 
 
     def self.get_all_states

@@ -8,7 +8,8 @@ class
      CommandLineInterface
 
     def initialize
-        # Insert Scraper methods probably
+        Scraper.get_all_states
+        CLI.run
     end
 
     def self.run
@@ -30,5 +31,4 @@ class
             Plant.all.find { |single_plant| single_plant.url == ('https://www.wildflower.org' + Scraper.last_search_page_scraped[index_number]) }
         end
     end
-
 end
