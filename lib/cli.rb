@@ -1,15 +1,14 @@
 require 'nokogiri'
 require 'open-uri'
 require_relative "..lib/scraper.rb"
-require_relative "..plant.rb"
+require_relative "..lib/plant.rb"
 require 'pry'
 
-class
-     CommandLineInterface
+class CommandLineInterface
 
     def initialize
         Scraper.get_all_states
-        CLI.call
+        CommandLineInterface.call
     end
 
     def self.call
@@ -24,11 +23,11 @@ class
         OPENER
         until input.downcase = "exit"
             if input.downcase == "states"
-                CLI.get_list_of_states_from_scraper 
-                CLI.choose_from_list_of_states
+                CommandLineInterface.get_list_of_states_from_scraper 
+                CommandLineInterface.choose_from_list_of_states
             elsif input.downcase == "search"
-                CLI.search_by_common_name
-                CLI.choose_from_search_page
+                CommandLineInterface.search_by_common_name
+                CommandLineInterface.choose_from_search_page
             end
         end
     end
@@ -45,7 +44,7 @@ class
             search_this = 'https://www.wildflower.org/collections/' + Scraper.state_url_ends[index_number]
             Scraper.scrape_search_page(search_this)
         elsif input = "back"
-            CLI.call
+            CommandLineInterface.call
         else
             puts "That input is invalid. Please select a number present on the list."
         end
@@ -61,7 +60,7 @@ class
              plant_choice.description
              PLANTINFO
         elsif input = "back"
-            CLI.call
+            CommandLineInterface.call
         else
             "That input is invalid. Please select a number present on the list."
         end
@@ -70,7 +69,7 @@ class
     def self.search_by_common_name
         input = gets.strip
         if input.downcase == "back"
-            CLI.call
+            CommandLineInterface.call
         else
             search_this = input.gsub(" ", "+")
             url = 'https://www.wildflower.org/plants/search.php?search_field=' + search_this + '&family=Acanthaceae&newsearch=true&demo='
