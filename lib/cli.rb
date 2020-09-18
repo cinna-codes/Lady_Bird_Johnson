@@ -67,8 +67,8 @@ class CLI
         puts "#{i}. Scientific name: #{single_plant.scientific_name} | Common name(s): #{single_plant.common_names}"
         end
         if Scraper.last_search_page_scraped == []
-            puts "🌻 Your search did not return any results. Hit enter and try again with a new plant."            
-            #puts "---------------------"
+            puts "🌻 Your search did not return any results. Please try again with a new plant."            
+            puts "---------------------"
         end
     end
 
@@ -89,9 +89,6 @@ class CLI
             single_plant = Plant.all.find { |searched_plant| searched_plant.url == Scraper.last_search_page_scraped[index_number] }
             puts "----- More Info -----"
             puts "Scientific name: #{single_plant.scientific_name} | Common name(s): #{single_plant.common_names} | Family name: #{single_plant.family_name}\n\n🌻 #{single_plant.description}"
-            puts "---------------------"
-        elsif Scraper.last_search_page_scraped == []
-        #     puts "Your search did not return any results. Hit enter and please try again with a new plant."            
             puts "---------------------"
         else
             puts "---------------------"
@@ -123,7 +120,7 @@ class CLI
         else
             Scraper.scrape_search_page(url)
             CLI.display_results_of_search
-            CLI.choose_from_search_page
+            CLI.choose_from_search_page if Scraper.last_search_page_scraped != []
         end
     end
 end
