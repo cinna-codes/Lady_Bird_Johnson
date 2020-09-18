@@ -37,11 +37,12 @@ class Scraper
 
         p_tags = doc.css("p").map { |line| line.text }
         description_array = p_tags[1..2]
-        # description_array.shift # Removes "Search for native plants by scientific name, common name or family. If you are not sure what you are looking for, try the Combination Search or our Recommended Species lists."
-        # description_array.pop(5) # Removes ["View propagation protocol from Native Plants Network.", "Go back", "4801 La Crosse Ave.Austin, TX 78739512.232.0100MapContact Us", "\n", "\n" (and something else?)] 
-            description = description_array.join("\n").strip # Make an `if` statement to account for []? Work on `.join` statement?
-            new_plant_instantiation_array = [url, scientific_name, common_names, family_name, description]
-            Plant.new(new_plant_instantiation_array) ### => Now you can send this off to Plant.new(Scraper.retrieve_single_plant_info(url))
+        description = description_array.join("\n").strip
+        if description == ""
+            description = "No description provided."
+        end
+        new_plant_instantiation_array = [url, scientific_name, common_names, family_name, description]
+        Plant.new(new_plant_instantiation_array) ### => Now you can send this off to Plant.new(Scraper.retrieve_single_plant_info(url))
         end
 
     def self.scrape_search_page(search_page_url)
