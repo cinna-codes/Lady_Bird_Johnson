@@ -26,18 +26,12 @@ class CLI
             if input.downcase == "states"
                 CLI.get_list_of_states_from_scraper 
                 CLI.choose_from_list_of_states
-                # CLI.display_results_of_search
-                # CLI.choose_from_search_page
                 if Scraper.last_search_page_scraped != []
                     CLI.display_results_of_search
                     CLI.choose_from_search_page
                 end
             elsif input.downcase == "search"
                 CLI.search_by_common_name
-                # if Scraper.last_search_page_scraped != []
-                #     CLI.display_results_of_search
-                #     CLI.choose_from_search_page
-                # end
             elsif input.downcase == "exit"
                 puts "See you later! 🌻"
             else

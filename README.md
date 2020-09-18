@@ -1,24 +1,14 @@
 # LadyBirdJohnsonWildflower
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/lady_bird_johnson_wildflower`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Welcome! This project was made by a student of Flatiron's Software Engineering course. 
+You can use this app to search through the plant database collected by the Lady Bird Johnson Wildflower Center (though it works best with native North American species). 
+You can visit them in your browser at: "https://www.wildflower.org/"
 
 ## Installation
 
-Add this line to your application's Gemfile:
-
-```ruby
-gem 'lady_bird_johnson_wildflower'
-```
-
-And then execute:
-
-    $ bundle install
-
-Or install it yourself as:
-
-    $ gem install lady_bird_johnson_wildflower
+1. Clone repo from Github
+2. Run Bundle install
+3. To use this program, run `./bin/lady_bird_johnson` in your terminal
 
 ## Usage
 
@@ -32,7 +22,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/lady_bird_johnson_wildflower. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/lady_bird_johnson_wildflower/blob/master/CODE_OF_CONDUCT.md).
+Bug reports and pull requests are welcome on GitHub at https://github.com/[cinna-codes]/lady_bird_johnson_wildflower. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[cinna-codes]/lady_bird_johnson_wildflower/blob/master/CODE_OF_CONDUCT.md).
 
 
 ## License
@@ -41,4 +31,4 @@ The gem is available as open source under the terms of the [MIT License](https:/
 
 ## Code of Conduct
 
-Everyone interacting in the LadyBirdJohnsonWildflower project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/lady_bird_johnson_wildflower/blob/master/CODE_OF_CONDUCT.md).
+Everyone interacting in the LadyBirdJohnsonWildflower project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[cinna-codes]/lady_bird_johnson_wildflower/blob/master/CODE_OF_CONDUCT.md).
