@@ -16,7 +16,7 @@ class CLI
         until input.downcase == "exit"
         puts greeting = <<~OPENER.strip
             Welcome! This project was made by a student of Flatiron's Software Engineering course. 
-            You can use this app to search through the plant database collected by the Lady Bird Johnson Wildflower Center. 
+            You can use this app to search through the plant database collected by the Lady Bird Johnson Wildflower Center (though it works best with native North American species). 
             You can visit them in your browser at: "https://www.wildflower.org/"
             If you would like to look at the recommended species by state, type "states" into the terminal.
             To search by a single plant, type "search" and then type your query on a new line.
@@ -26,8 +26,12 @@ class CLI
             if input.downcase == "states"
                 CLI.get_list_of_states_from_scraper 
                 CLI.choose_from_list_of_states
-                CLI.display_results_of_search
-                CLI.choose_from_search_page
+                # CLI.display_results_of_search
+                # CLI.choose_from_search_page
+                if Scraper.last_search_page_scraped != []
+                    CLI.display_results_of_search
+                    CLI.choose_from_search_page
+                end
             elsif input.downcase == "search"
                 CLI.search_by_common_name
                 # if Scraper.last_search_page_scraped != []
@@ -37,7 +41,7 @@ class CLI
             elsif input.downcase == "exit"
                 puts "See you later! 🌻"
             else
-                puts "Please enter a valid term."
+                puts "🌻 Please enter a valid term."
             end
         end
     end
@@ -57,7 +61,9 @@ class CLI
             search_this = 'https://www.wildflower.org/collections/' + Scraper.state_url_ends[index_number]
             Scraper.scrape_search_page(search_this)
         else
+            puts "---------------------"
             puts "🌻 That input is invalid. Please select a number present on the list."
+            puts "---------------------"
         end
     end
 
@@ -67,6 +73,7 @@ class CLI
         puts "#{i}. Scientific name: #{single_plant.scientific_name} | Common name(s): #{single_plant.common_names}"
         end
         if Scraper.last_search_page_scraped == []
+            puts "---------------------"
             puts "🌻 Your search did not return any results. Please try again with a new plant."            
             puts "---------------------"
         end
@@ -109,9 +116,7 @@ class CLI
             search_this = input
         end
         url = 'https://www.wildflower.org/plants/search.php?search_field=' + search_this + '&family=Acanthaceae&newsearch=true&demo='
-        #binding.pry
         if Scraper.single_plant?(url) == true
-            # Return single plant info
             Scraper.retrieve_single_plant_info(url)
             single_plant = Plant.all.find { |searched_plant| searched_plant.url == url }
             puts "----- More Info -----"
