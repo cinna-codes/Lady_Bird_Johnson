@@ -16,7 +16,8 @@ class CLI
         until input.downcase == "exit"
         puts greeting = <<~OPENER.strip
             Welcome! This project was made by a student of Flatiron's Software Engineering course. 
-            You can use this app to search through the plant database collected by the Lady Bird Johnson Wildflower Center. You can visit them in your browser at: "https://www.wildflower.org/"
+            You can use this app to search through the plant database collected by the Lady Bird Johnson Wildflower Center. 
+            You can visit them in your browser at: "https://www.wildflower.org/"
             If you would like to look at the recommended species by state, type "states" into the terminal.
             To search by a single plant, type "search" and then type your query on a new line.
             Once you're finished with using the app, typing "exit" will end your session.
@@ -29,10 +30,10 @@ class CLI
                 CLI.choose_from_search_page
             elsif input.downcase == "search"
                 CLI.search_by_common_name
-                if Scraper.last_search_page_scraped != []
-                    CLI.display_results_of_search
-                    CLI.choose_from_search_page
-                end
+                # if Scraper.last_search_page_scraped != []
+                #     CLI.display_results_of_search
+                #     CLI.choose_from_search_page
+                # end
             elsif input.downcase == "exit"
                 puts "See you later!"
             else
@@ -61,26 +62,26 @@ class CLI
     end
 
     def self.display_results_of_search
-        # binding.pry
         Scraper.last_search_page_scraped.each.with_index(1) do |scraped_url, i|  
-            single_plant = Plant.all.find { |searched_plant| searched_plant.url == scraped_url } #puts "#{i}. Scientific name: #{searched_plant.scientific_name} | Common name(s): #{searched_plant.common_names}" if searched_plant.url == scraped_url }
+            single_plant = Plant.all.find { |searched_plant| searched_plant.url == scraped_url }
         puts "#{i}. Scientific name: #{single_plant.scientific_name} | Common name(s): #{single_plant.common_names}"
         end
     end
 
     def self.choose_from_search_page
-        # binding.pry
         input = gets.strip
         index_number = input.to_i - 1
         if index_number.between?(0, Scraper.last_search_page_scraped.length-1)
             single_plant = Plant.all.find { |searched_plant| searched_plant.url == Scraper.last_search_page_scraped[index_number] }
-            puts "----- More Info ----- "
+            puts "----- More Info -----"
             puts "Scientific name: #{single_plant.scientific_name} | Common name(s): #{single_plant.common_names} | Family name: #{single_plant.family_name}\n#{single_plant.description}"
-            puts "----------------------"
+            puts "---------------------"
+        elsif Scraper.last_search_page_scraped == []
+            puts "---------------------"
         else
-            puts "----------------------"
-            puts "That input is invalid. Please select a number present on the list."
-            puts "----------------------"
+            puts "---------------------"
+            puts "That input is invalid. Please select a number present on the list next time."
+            puts "---------------------"
         end
     end
 
@@ -95,8 +96,18 @@ class CLI
             search_this = input
         end
         url = 'https://www.wildflower.org/plants/search.php?search_field=' + search_this + '&family=Acanthaceae&newsearch=true&demo='
-        Scraper.scrape_search_page(url)
-        # CLI.display_results_of_search
-        # CLI.choose_from_search_page
+        #binding.pry
+        if Scraper.single_plant?(url) == true
+            # Return single plant info
+            Scraper.retrieve_single_plant_info(url)
+            single_plant = Plant.all.find { |searched_plant| searched_plant.url == url }
+            puts "----- More Info -----"
+            puts "Scientific name: #{single_plant.scientific_name} | Common name(s): #{single_plant.common_names} | Family name: #{single_plant.family_name}\n#{single_plant.description}"
+            puts "---------------------"
+        else
+            Scraper.scrape_search_page(url)
+            CLI.display_results_of_search
+            CLI.choose_from_search_page
+        end
     end
 end
