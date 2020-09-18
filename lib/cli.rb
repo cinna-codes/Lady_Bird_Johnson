@@ -61,6 +61,7 @@ class CLI
     end
 
     def self.display_results_of_search
+        # binding.pry
         Scraper.last_search_page_scraped.each.with_index(1) do |scraped_url, i|  
             single_plant = Plant.all.find { |searched_plant| searched_plant.url == scraped_url } #puts "#{i}. Scientific name: #{searched_plant.scientific_name} | Common name(s): #{searched_plant.common_names}" if searched_plant.url == scraped_url }
         puts "#{i}. Scientific name: #{single_plant.scientific_name} | Common name(s): #{single_plant.common_names}"
@@ -73,9 +74,13 @@ class CLI
         index_number = input.to_i - 1
         if index_number.between?(0, Scraper.last_search_page_scraped.length-1)
             single_plant = Plant.all.find { |searched_plant| searched_plant.url == Scraper.last_search_page_scraped[index_number] }
+            puts "----- More Info ----- "
             puts "Scientific name: #{single_plant.scientific_name} | Common name(s): #{single_plant.common_names} | Family name: #{single_plant.family_name}\n#{single_plant.description}"
+            puts "----------------------"
         else
-            "That input is invalid. Please select a number present on the list."
+            puts "----------------------"
+            puts "That input is invalid. Please select a number present on the list."
+            puts "----------------------"
         end
     end
 
