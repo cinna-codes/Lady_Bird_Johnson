@@ -58,7 +58,7 @@ class Scraper
             # doc.css("i").map { |d| d.text } 
         else
             @@last_search_page_scraped = []
-           puts "Your search did not return any results. Hit enter and please try again with a new plant."
+        #    puts "Your search did not return any results. Hit enter and please try again with a new plant."
         end
     end
 
