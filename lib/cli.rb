@@ -1,77 +1,97 @@
-require 'nokogiri'
-require 'open-uri'
-require_relative "..lib/scraper.rb"
-require_relative "..lib/plant.rb"
-require 'pry'
+# require 'nokogiri'
+# require 'open-uri'
+# require_relative "..lib/scraper.rb"
+# require_relative "..lib/plant.rb"
+# require 'pry'
 
-class CommandLineInterface
+class CLI
 
     def initialize
         Scraper.get_all_states
-        CommandLineInterface.call
+        CLI.call
     end
 
     def self.call
         input = ""
+        until input.downcase == "exit"
         puts greeting = <<~OPENER.strip
             Welcome! This project was made by a student of Flatiron's Software Engineering course. 
             You can use this app to search through the plant database collected by the Lady Bird Johnson Wildflower Center. You can visit them in your browser at: "https://www.wildflower.org/"
             If you would like to look at the recommended species by state, type "states" into the terminal.
             To search by a single plant, type "search" and then type your query on a new line.
-            Typing "back" will take you back to this menu.
             Once you're finished with using the app, typing "exit" will end your session.
         OPENER
-        until input.downcase == "exit"
+        input = gets.strip
             if input.downcase == "states"
-                CommandLineInterface.get_list_of_states_from_scraper 
-                CommandLineInterface.choose_from_list_of_states
+                CLI.get_list_of_states_from_scraper 
+                CLI.choose_from_list_of_states
+                CLI.display_results_of_search
+                CLI.choose_from_search_page
             elsif input.downcase == "search"
-                CommandLineInterface.search_by_common_name
-                CommandLineInterface.choose_from_search_page
+                CLI.search_by_common_name
+                if Scraper.last_search_page_scraped != []
+                    CLI.display_results_of_search
+                    CLI.choose_from_search_page
+                end
+            elsif input.downcase == "exit"
+                puts "See you later!"
+            else
+                puts "Please enter a valid term."
             end
         end
     end
 
     def self.get_list_of_states_from_scraper
         puts "----- Recommended Species By State -----"
-        Scraper.list_of_states.each.with_index(1) { |d, i| puts "#{i}. #{d}" }  # => Starts index @ 1
+        Scraper.list_of_states.each.with_index(1) { |state, i| puts "#{i}. #{state}" }  # => Starts index @ 1
     end
 
     def self.choose_from_list_of_states
-        gets input.strip
-        index_number = input.to_i - 1
+        puts "Type a number from the list above to see the recommended species by state."
+        state_choice = gets.strip
+        puts "Getting info—one moment please..."
+        index_number = state_choice.to_i - 1
+        search_this = ""
         if index_number.between?(0, Scraper.list_of_states.length-1)
             search_this = 'https://www.wildflower.org/collections/' + Scraper.state_url_ends[index_number]
             Scraper.scrape_search_page(search_this)
-        elsif input == "back"
-            CommandLineInterface.call
         else
             puts "That input is invalid. Please select a number present on the list."
         end
     end
 
+    def self.display_results_of_search
+        Scraper.last_search_page_scraped.each.with_index(1) do |scraped_url, i|  
+            single_plant = Plant.all.find { |searched_plant| searched_plant.url == scraped_url } #puts "#{i}. Scientific name: #{searched_plant.scientific_name} | Common name(s): #{searched_plant.common_names}" if searched_plant.url == scraped_url }
+        puts "#{i}. Scientific name: #{single_plant.scientific_name} | Common name(s): #{single_plant.common_names}"
+        end
+    end
+
     def self.choose_from_search_page
+        # binding.pry
         input = gets.strip
-        index_number = input.to_i
+        index_number = input.to_i - 1
         if index_number.between?(0, Scraper.last_search_page_scraped.length-1)
-            plant_choice = Plant.all.find { |single_plant| single_plant.url == ('https://www.wildflower.org' + Scraper.last_search_page_scraped[index_number]) }
-            puts "Scientific name: #{plant_choice.scientific_name} | Common name(s): #{plant_choice.common_names} | Family name: #{plant_choice.family_name}\n#{plant_choice.description}"
-        elsif input.downcase == "back"
-            CommandLineInterface.call
+            single_plant = Plant.all.find { |searched_plant| searched_plant.url == Scraper.last_search_page_scraped[index_number] }
+            puts "Scientific name: #{single_plant.scientific_name} | Common name(s): #{single_plant.common_names} | Family name: #{single_plant.family_name}\n#{single_plant.description}"
         else
             "That input is invalid. Please select a number present on the list."
         end
     end
 
     def self.search_by_common_name
+        puts "Please enter the common name of the plant that you would like to find."
         input = gets.strip
-        if input.downcase == "back"
-            CommandLineInterface.call
-        else
+        puts "Getting info—one moment please..."
+        search_this = ""
+        if input.include?(" ")
             search_this = input.gsub(" ", "+")
-            url = 'https://www.wildflower.org/plants/search.php?search_field=' + search_this + '&family=Acanthaceae&newsearch=true&demo='
-            url
-            Scraper.scrape_search_page(url)
+        else
+            search_this = input
         end
+        url = 'https://www.wildflower.org/plants/search.php?search_field=' + search_this + '&family=Acanthaceae&newsearch=true&demo='
+        Scraper.scrape_search_page(url)
+        # CLI.display_results_of_search
+        # CLI.choose_from_search_page
     end
 end

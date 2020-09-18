@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+require "bundler/setup"
+require_relative "../lib/lady_bird_johnson_wildflower"
+
+CLI.new
