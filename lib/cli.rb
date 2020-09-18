@@ -35,7 +35,7 @@ class CLI
                 #     CLI.choose_from_search_page
                 # end
             elsif input.downcase == "exit"
-                puts "See you later!"
+                puts "See you later! 🌻"
             else
                 puts "Please enter a valid term."
             end
@@ -48,16 +48,16 @@ class CLI
     end
 
     def self.choose_from_list_of_states
-        puts "Type a number from the list above to see the recommended species by state."
+        puts "🌻 Type a number from the list above to see the recommended species by state."
         state_choice = gets.strip
-        puts "Getting info—one moment please..."
+        puts "🌻 Getting info—one moment please..."
         index_number = state_choice.to_i - 1
         search_this = ""
         if index_number.between?(0, Scraper.list_of_states.length-1)
             search_this = 'https://www.wildflower.org/collections/' + Scraper.state_url_ends[index_number]
             Scraper.scrape_search_page(search_this)
         else
-            puts "That input is invalid. Please select a number present on the list."
+            puts "🌻 That input is invalid. Please select a number present on the list."
         end
     end
 
@@ -67,44 +67,44 @@ class CLI
         puts "#{i}. Scientific name: #{single_plant.scientific_name} | Common name(s): #{single_plant.common_names}"
         end
         if Scraper.last_search_page_scraped == []
-            puts "Your search did not return any results. Hit enter and try again with a new plant."            
+            puts "🌻 Your search did not return any results. Hit enter and try again with a new plant."            
             #puts "---------------------"
         end
     end
 
     def self.choose_from_search_page
-        puts "Type a number from the list above to see more information about one of these species."
-        puts 'Alternatively, type "all" if you would like to see more information about every species listed.'
+        puts "🌻 Type a number from the list above to see more information about one of these species."
+        puts '🌻 Alternatively, type "all" if you would like to see more information about every species listed.'
         input = gets.strip
         index_number = input.to_i - 1
         if input.downcase == "all"
             puts "---------------------"
             Scraper.last_search_page_scraped.each.with_index(1) do |scraped_url, i| 
             single_plant = Plant.all.find { |searched_plant| searched_plant.url == scraped_url }
-            puts "#{i}. Scientific name: #{single_plant.scientific_name} | Common name(s): #{single_plant.common_names} | Family name: #{single_plant.family_name}\n #{single_plant.description}"
+            puts "#{i}. Scientific name: #{single_plant.scientific_name} | Common name(s): #{single_plant.common_names} | Family name: #{single_plant.family_name}\n\n🌻 #{single_plant.description}"
             puts "---------------------"
             end
 
         elsif index_number.between?(0, Scraper.last_search_page_scraped.length-1)
             single_plant = Plant.all.find { |searched_plant| searched_plant.url == Scraper.last_search_page_scraped[index_number] }
             puts "----- More Info -----"
-            puts "Scientific name: #{single_plant.scientific_name} | Common name(s): #{single_plant.common_names} | Family name: #{single_plant.family_name}\n #{single_plant.description}"
+            puts "Scientific name: #{single_plant.scientific_name} | Common name(s): #{single_plant.common_names} | Family name: #{single_plant.family_name}\n\n🌻 #{single_plant.description}"
             puts "---------------------"
         elsif Scraper.last_search_page_scraped == []
         #     puts "Your search did not return any results. Hit enter and please try again with a new plant."            
             puts "---------------------"
         else
             puts "---------------------"
-            puts "That input is invalid. Please select a number present on the list next time."
+            puts "🌻 That input is invalid. Please select a number present on the list next time."
             puts "---------------------"
         end
     end
 
     def self.search_by_common_name
-        puts "Please enter the name of the plant that you would like to find."
-        puts "Common names are more likely to get you a list of species, while scientific names are more likely to show you the exact plant you're looking for."
+        puts "🌻 Please enter the name of the plant that you would like to find."
+        puts "🌻 Common names are more likely to get you a list of species, while scientific names are more likely to show you the exact plant you're looking for."
         input = gets.strip
-        puts "Getting info—one moment please..."
+        puts "🌻 Getting info—one moment please..."
         search_this = ""
         if input.include?(" ")
             search_this = input.gsub(" ", "+")
@@ -118,7 +118,7 @@ class CLI
             Scraper.retrieve_single_plant_info(url)
             single_plant = Plant.all.find { |searched_plant| searched_plant.url == url }
             puts "----- More Info -----"
-            puts "Scientific name: #{single_plant.scientific_name} | Common name(s): #{single_plant.common_names} | Family name: #{single_plant.family_name}\n#{single_plant.description}"
+            puts "Scientific name: #{single_plant.scientific_name} | Common name(s): #{single_plant.common_names} | Family name: #{single_plant.family_name}\n\n🌻 #{single_plant.description}"
             puts "---------------------"
         else
             Scraper.scrape_search_page(url)
