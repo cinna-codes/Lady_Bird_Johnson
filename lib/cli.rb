@@ -49,11 +49,11 @@ class CLI
         puts "🌻 Type a number from the list above to see the recommended species by state."
         state_choice = gets.strip
         puts "🌻 Getting info—one moment please..."
+        # binding.pry
         index_number = state_choice.to_i - 1
         search_this = ""
         if index_number.between?(0, Scraper.list_of_states.length-1)
-            search_this = 'https://www.wildflower.org/collections/' + Scraper.state_url_ends[index_number]
-            Scraper.scrape_search_page(search_this)
+            Scraper.scrape_search_page(Scraper.state_urls[index_number])
         else
             puts "---------------------"
             puts "🌻 That input is invalid. Please select a number present on the list."
