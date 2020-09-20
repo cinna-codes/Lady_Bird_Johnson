@@ -35,9 +35,7 @@ class Scraper
         family_name = tax_array[2]
         description = ""
 
-        p_tags = doc.css("p").map { |line| line.text }
-        description_array = p_tags[1..2]
-        description = description_array.join("\n").strip
+        description = doc.css("p").map { |line| line.text.strip }[1..2].join("\n").strip
         if description == ""
             description = "No description provided."
         end
@@ -53,8 +51,6 @@ class Scraper
             @@last_search_page_scraped.each do |url| 
                 new_plant = Scraper.retrieve_single_plant_info(url)
             end
-        else
-            @@last_search_page_scraped = []
         end
     end
 

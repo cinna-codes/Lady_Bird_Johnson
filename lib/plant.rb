@@ -15,10 +15,9 @@ class Plant
         @description = plant_array[4]
 
         @@all << self
-
     end
 
-        def self.all
-            @@all
-        end
+    def self.all
+        @@all
+    end
 end

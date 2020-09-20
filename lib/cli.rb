@@ -49,7 +49,6 @@ class CLI
         puts "🌻 Type a number from the list above to see the recommended species by state."
         state_choice = gets.strip
         puts "🌻 Getting info—one moment please..."
-        # binding.pry
         index_number = state_choice.to_i - 1
         search_this = ""
         if index_number.between?(0, Scraper.list_of_states.length-1)
