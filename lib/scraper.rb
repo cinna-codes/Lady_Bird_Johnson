@@ -13,8 +13,7 @@ class Scraper
         states = Nokogiri::HTML(open(@@collections_url))
         list_of_states_section = states.css(".section").first
         @@state_urls = list_of_states_section.css("a").map { |state_url_half| state_url_half = 'https://www.wildflower.org/collections/' + state_url_half.attribute("href").value }  
-        @@list_of_states = list_of_states_section.text.split(/ \|\n|\n/) # => splits by " |\n" and "\n"
-        @@list_of_states.shift(2) # => Removes "" and "Recommended Species By State" from the beginning of the array
+        @@list_of_states = list_of_states_section.text.split(/ \|\n|\n/)[2..-1] # => splits by " |\n" and "\n", then removes "" and "Recommended Species By State" from the beginning of the array
         @@list_of_states
     end
 
