@@ -47,7 +47,7 @@ class Scraper
         @@last_search_page_scraped = []
         doc = Nokogiri::HTML(open(search_page_url))
         if !doc.css("p").text.include?("Your search did not return any results, please try again.")
-            @@last_search_page_scraped = doc.css("td a").map { |link| link.attribute("href").text }.reject { |url_half| url_half.include?("gallery") }.map { |url_half| url_half = ('https://www.wildflower.org/plants/' + url_half) }
+            @@last_search_page_scraped = doc.css("td a").map { |link| link = ('https://www.wildflower.org' + link.attribute("href").text.delete_prefix("..")) }.reject { |url| url.include?("gallery") }
             @@last_search_page_scraped.each do |url| 
                 new_plant = Scraper.retrieve_single_plant_info(url)
             end
