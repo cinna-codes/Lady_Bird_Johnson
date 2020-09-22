@@ -12,7 +12,7 @@ You can visit them in your browser at: "https://www.wildflower.org/"
 
 ## Usage
 
-You can use this app to search through the plant database collected by the Lady Bird Johnson Wildflower Center (though it works best with native North American species). Follow the prompts when you run the program.
+You can use this app to search through the plant database collected by the Lady Bird Johnson Wildflower Center (though it works best with native North American species). Follow the prompts when you run the program: you can either search by specific plants or look at the recommended list of species by state.
 
 ## Development
 
